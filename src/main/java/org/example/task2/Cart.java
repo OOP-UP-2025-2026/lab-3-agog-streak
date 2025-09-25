@@ -1,9 +1,7 @@
 package org.example.task2;
 
-import java.util.Arrays;
-
 public class Cart {
-    private Item[] contents;
+    private final Item[] contents; // final, бо ми більше не міняємо посилання
     private int index; // кількість реально доданих товарів
 
     public Cart(Item[] contents) {
@@ -51,9 +49,7 @@ public class Cart {
 
     public Item[] getItems() {
         Item[] actualItems = new Item[this.index];
-        for (int i = 0; i < this.index; i++) {
-            actualItems[i] = this.contents[i];
-        }
+        System.arraycopy(this.contents, 0, actualItems, 0, this.index);
         return actualItems;
     }
 
@@ -79,4 +75,5 @@ public class Cart {
         return builder.toString();
     }
 }
+
 
