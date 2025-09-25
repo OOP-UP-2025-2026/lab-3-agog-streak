@@ -24,5 +24,33 @@ public class Main {
         Order order = new Order(1L, "John");
         String bill = order.formOrderBill(cart);
         System.out.println(bill);
+
+        //Box
+        try {
+            Box box = new Box(3, 4, 5);
+            System.out.println("Площа поверхні: " + box.getSurfaceArea());
+            System.out.println("Площа бічної поверхні: " + box.getLateralSurfaceArea());
+            System.out.println("Об’єм: " + box.getVolume());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка: " + e.getMessage());
+        }
+
+        //IntStack
+        IntStack stack = new IntStack();
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println("Розмір: " + stack.size());    // 3
+        System.out.println("Верхній елемент: " + stack.peek()); // 30
+
+        System.out.println("Pop: " + stack.pop()); // 30
+        System.out.println("Pop: " + stack.pop()); // 20
+
+        System.out.println("Розмір після pop: " + stack.size()); // 1
+
+        stack.clear();
+        System.out.println("Стек порожній? " + stack.isEmpty());
     }
 }

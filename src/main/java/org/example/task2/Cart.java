@@ -3,67 +3,80 @@ package org.example.task2;
 import java.util.Arrays;
 
 public class Cart {
+    private Item[] contents;
+    private int index; // кількість реально доданих товарів
 
-    public Item[] contents;
-    int index;
-
-    Cart(Item[] _contents) {
-        this.contents = _contents;
+    public Cart(Item[] contents) {
+        if (contents == null || contents.length == 0) {
+            throw new IllegalArgumentException("Масив товарів не може бути пустим");
+        }
+        this.contents = contents;
+        this.index = 0;
     }
 
-    public void removeById(int itemIndex) {
-
-        if (index == 0)
+    public void add(Item item) {
+        if (this.isFull()) {
+            System.out.println("Кошик переповнений! Неможливо додати товар: " + item.getName());
             return;
+        }
+        this.contents[this.index] = item;
+        this.index++;
+    }
 
-        int foundItemIndex = findItemInArray(contents[itemIndex]);
+    public void removeById(long id) {
+        int foundIndex = this.findItemIndexById(id);
 
-        if (foundItemIndex == -1)
-            return;
-
-        if (foundItemIndex == index - 1) {
-            contents[index - 1] = null;
-            index--;
+        if (foundIndex == -1) {
+            System.out.println("Товар з id=" + id + " не знайдено у кошику.");
             return;
         }
 
-        shiftArray(foundItemIndex);
-    }
-
-    public void shiftArray(int itemIndex) {
-        for (int i = itemIndex; i < index - 1; i++) {
-            contents[i] = contents[i + 1];
+        // Зсув масиву вліво
+        for (int i = foundIndex; i < this.index - 1; i++) {
+            this.contents[i] = this.contents[i + 1];
         }
-        contents[index-1] = null;
-        index--;
+
+        this.contents[this.index - 1] = null; // останній елемент очищаємо
+        this.index--;
     }
 
-    public int findItemInArray(Item item) {
-        for (int i = 0; i < index; i++) {
-            if (contents[i].id == item.id) {
+    private int findItemIndexById(long id) {
+        for (int i = 0; i < this.index; i++) {
+            if (this.contents[i].getId() == id) {
                 return i;
             }
         }
-
         return -1;
     }
 
-    void add(Item item) {
-        if (isCartFull())
-            return;
-
-        contents[index] = item;
-        index++;
+    public Item[] getItems() {
+        Item[] actualItems = new Item[this.index];
+        for (int i = 0; i < this.index; i++) {
+            actualItems[i] = this.contents[i];
+        }
+        return actualItems;
     }
 
-    public boolean isCartFull() {
-        return index == contents.length;
+    public double getTotalPrice() {
+        double sum = 0.0;
+        for (int i = 0; i < this.index; i++) {
+            sum += this.contents[i].getPrice();
+        }
+        return sum;
+    }
+
+    public boolean isFull() {
+        return this.index == this.contents.length;
     }
 
     @Override
     public String toString() {
-        return "Cart{" +
-                "contents=" + Arrays.toString(contents) +
-                '}' + "\n";
+        StringBuilder builder = new StringBuilder("Cart{\n");
+        for (int i = 0; i < this.index; i++) {
+            builder.append("  ").append(this.contents[i].toString()).append("\n");
+        }
+        builder.append("}");
+        return builder.toString();
     }
 }
+
