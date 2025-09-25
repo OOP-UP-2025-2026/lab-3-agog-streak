@@ -58,9 +58,7 @@ public class IntStack {
     private void grow() {
         int newCapacity = this.elements.length * 2;
         int[] newArray = new int[newCapacity];
-        for (int i = 0; i < this.size; i++) {
-            newArray[i] = this.elements[i];
-        }
+        System.arraycopy(this.elements, 0, newArray, 0, this.size);
         this.elements = newArray;
     }
 }
